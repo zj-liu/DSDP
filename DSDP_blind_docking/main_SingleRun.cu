@@ -53,6 +53,9 @@ int main(int argn, char* argv[])
 	// below parameters can be changed while command line input, but default may be good
 	unsigned int stream_numbers = 384; //该版本每个stream就对应一个副本操作
 	unsigned int search_depth = 40;	   //每个副本尝试搜索的次数
+
+	int npy_length=36;
+
 	int desired_point_numbers = 200;	  // select npy array's 36*36*36's top 200 site points for build searching space
 
 	float box_length = 30.f;			  // another space restrain, manily because of the interpolation space limit, larger will slower(if keep interpolation precision in the same time)
@@ -119,6 +122,11 @@ int main(int argn, char* argv[])
 			i += 1;
 			sscanf(argv[i], "%d", &desired_saving_pose_numbers);
 		}
+		else if (strcmp(argv[i], "-npy_length") == 0)
+		{
+			i += 1;
+			sscanf(argv[i], "%d", &npy_length);
+		}
 	}
 	if (necessary_input_number_record != 3)
 	{
@@ -169,6 +177,9 @@ int main(int argn, char* argv[])
 	app.add_option("--top_n", desired_saving_pose_numbers, "number of desired output poses [=10]")
 		->default_val(10)
 		->option_text("N");
+	app.add_option("--npy_length", npy_length, "lengths of the predicted binding site [=36]")
+		->default_val(36)
+		->option_text("N");
 
 	CLI11_PARSE(app, argn, argv);
 
@@ -197,7 +208,7 @@ int main(int argn, char* argv[])
 	molecule.resize(stream_numbers);
 	nl_grid.Initial(neighbor_grid_box_length, cutoff, neighbor_grid_skin);
 	vgff.Initial(protein_mesh_grid_one_dimension_numbers, cutoff);
-	site_info.Initial(site_npy_name, desired_point_numbers);
+	site_info.Initial(site_npy_name, desired_point_numbers, npy_length);
 
 
 	//依赖于蛋白信息的初始化
@@ -525,7 +536,7 @@ int main(int argn, char* argv[])
 #ifdef OMP_TIME
 	time_start = omp_get_wtime() - time_start;
 #endif // OMP_TIME
-}
+}  //Here: end for
 	//second sort
 	sort(energy_record_merge.begin(), energy_record_merge.end(), cmp);
 	DSDP_sort.Sort_Structures(

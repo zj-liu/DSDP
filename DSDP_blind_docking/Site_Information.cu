@@ -11,10 +11,12 @@ static bool _cmp(const int3_float& a, const int3_float& b)
 	}
 }
 
-void SITE_INFORMATION::Initial(const char* site_npy_name,const int desired_point_numbers)
+void SITE_INFORMATION::Initial(const char* site_npy_name,const int desired_point_numbers, int npy_length)
 {
 
 	selected_point.clear();
+	half_length_of_npy_box = (float)npy_length-1.f;
+	mesh = std::vector<int3_float>(npy_length * npy_length * npy_length);
 
 	FILE* mesh_in = fopen(site_npy_name, "rb");
 	fseek(mesh_in, 128, SEEK_SET);//npy format, jump 128 bytes
@@ -35,12 +37,12 @@ void SITE_INFORMATION::Initial(const char* site_npy_name,const int desired_point
 				mesh[(size_t)npy_length * npy_length * x + (size_t)npy_length * y + z] = temp2;
 			}
 		}
-	}//xyzË³ÐòÓënpy¼ÇÂ¼µÄ¶ÔÓ¦
+	}//xyzË³ï¿½ï¿½ï¿½ï¿½npyï¿½ï¿½Â¼ï¿½Ä¶ï¿½Ó¦
 
 	fclose(mesh_in);
 	std::sort(std::begin(mesh), std::end(mesh), _cmp);
 	//double time_start = omp_get_wtime();
-	selected_point.resize(desired_point_numbers);//select Ç°nÃû as searching point space
+	selected_point.resize(desired_point_numbers);//select Ç°nï¿½ï¿½ as searching point space
 
 	for (int i = 0; i < desired_point_numbers; i = i + 1)
 	{

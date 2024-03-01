@@ -34,9 +34,9 @@ struct v_float4
 struct SITE_INFORMATION
 {
 //coefficient for transform from npy array to point coordinate
-	const int npy_length=36;
-	const float scale_factor=2.f;
-	const float half_length_of_npy_box=35.f;
+	//const int npy_length=36;
+	float scale_factor=2.f;
+	float half_length_of_npy_box;
 	
 	
         CLUSTER cluster;
@@ -44,12 +44,12 @@ struct SITE_INFORMATION
 	std::vector<VECTOR> site_point;
 
 	int point_numbers = 0;
-	std::vector<int3_float> mesh = std::vector<int3_float>(npy_length * npy_length * npy_length);
+	std::vector<int3_float> mesh;
 	std::vector<INT_VECTOR>selected_point;
-	VECTOR box_min;//¸ù¾Ýsite_pointÊµ¼ÊÍÆ¼öµÄÕý½»ºÐ×ÓÇøÓò£¬Ä¿Ç°²ÉÓÃÒÔ0.5(point_min+max)ÎªÖÐÐÄ£¬±ß³¤Îªbox_lengthµÄ·½°¸¡£
+	VECTOR box_min;//ï¿½ï¿½ï¿½ï¿½site_pointÊµï¿½ï¿½ï¿½Æ¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0.5(point_min+max)Îªï¿½ï¿½ï¿½Ä£ï¿½ï¿½ß³ï¿½Îªbox_lengthï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½
 	VECTOR box_max;
 
-	void Initial(const char* site_npy_name,const int desired_point_numbers);
+	void Initial(const char* site_npy_name,const int desired_point_numbers,int npy_length);
 	
 };
 #endif //SITE_INFORMATION_CUH

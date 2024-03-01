@@ -194,7 +194,7 @@ void PARTIAL_RIGID_SMALL_MOLECULE::GPU::Initial(PARTIAL_RIGID_SMALL_MOLECULE* mo
 	node_numbers = tree[0].torsion_numbers;
 	u_freedom = node_numbers + 6;
 
-	//pu上原子相关信息的内存分配
+	//gpu上原子相关信息的内存分配
 	if (malloced_atom_numbers >= partial_rigid_small_molecule[0].atom_numbers)
 	{
 		;
@@ -282,7 +282,7 @@ void PARTIAL_RIGID_SMALL_MOLECULE::GPU::Initial(PARTIAL_RIGID_SMALL_MOLECULE* mo
 	cudaMemcpy(atom_to_node_serial, &tree[0].atom_to_node_serial[0], sizeof(int) * atom_numbers, cudaMemcpyHostToDevice);
 
 	//由于这里只是初始化，具体初猜用的u_crd在其他地方进行更新，因此全部为0.f
-	memset(&h_u_crd[0], 0, sizeof(float) * u_freedom);
+	memset(&h_u_crd[0], 0, sizeof(float) * u_freedom); //
 	cudaMemset(u_crd, 0, sizeof(float) * u_freedom);
 	cudaMemset(last_u_crd, 0, sizeof(float) * u_freedom);
 	memset(h_last_accepted_u_crd, 0, sizeof(float) * u_freedom);
