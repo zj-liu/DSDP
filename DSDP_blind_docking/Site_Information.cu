@@ -13,10 +13,10 @@ static bool _cmp(const int3_float& a, const int3_float& b)
 
 void SITE_INFORMATION::Initial(const char* site_npy_name,const int desired_point_numbers, int npy_length)
 {
-
+	this->npy_length = npy_length;
 	selected_point.clear();
 	half_length_of_npy_box = (float)npy_length-1.f;
-	mesh = std::vector<int3_float>(npy_length * npy_length * npy_length);
+	mesh.resize(npy_length*npy_length*npy_length);
 
 	FILE* mesh_in = fopen(site_npy_name, "rb");
 	fseek(mesh_in, 128, SEEK_SET);//npy format, jump 128 bytes
@@ -35,6 +35,10 @@ void SITE_INFORMATION::Initial(const char* site_npy_name,const int desired_point
 
 				int3_float temp2 = { x,y,z,temp.w };
 				mesh[(size_t)npy_length * npy_length * x + (size_t)npy_length * y + z] = temp2;
+				if (x < 2 || x > npy_length-3 || y < 2 || y > npy_length-3 || z < 2 || z > npy_length-3)
+				{
+					mesh[(size_t)npy_length * npy_length * x + (size_t)npy_length * y + z].w = -1.f; //不讨论靠近边界的点
+				}
 			}
 		}
 	}//xyz˳����npy��¼�Ķ�Ӧ

@@ -34,8 +34,8 @@ struct v_float4
 struct SITE_INFORMATION
 {
 //coefficient for transform from npy array to point coordinate
-	//const int npy_length=36;
-	float scale_factor=2.f;
+	int npy_length=36;
+	const float scale_factor=2.f;
 	float half_length_of_npy_box;
 	
 	
